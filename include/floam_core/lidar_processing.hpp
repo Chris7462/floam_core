@@ -27,10 +27,10 @@ struct PointsInfo
   PointsInfo(int layer_in, double time_in);
 };
 
-class LaserProcessing
+class LidarProcessing
 {
 public:
-  LaserProcessing() = default;
+  LidarProcessing() = default;
   void init(Lidar lidar_param_in);
   void featureExtraction(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
     pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_edge,

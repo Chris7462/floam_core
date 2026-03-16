@@ -2,13 +2,13 @@
 #include <pcl/common/transforms.h>
 
 // local header
-#include "floam_core/laser_mapping.hpp"
+#include "floam_core/lidar_mapping.hpp"
 
 
 namespace floam_core
 {
 
-void LaserMapping::init(double map_resolution)
+void LidarMapping::init(double map_resolution)
 {
   //init map. init can have real object, but future added block does not need
   for (int i = 0; i < LASER_CELL_RANGE_HORIZONTAL * 2 + 1; i++) {
@@ -36,7 +36,7 @@ void LaserMapping::init(double map_resolution)
 }
 
 // update points to map
-void LaserMapping::updateCurrentPointsToMap(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in, const Eigen::Isometry3d& pose_current)
+void LidarMapping::updateCurrentPointsToMap(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in, const Eigen::Isometry3d& pose_current)
 {
   int currentPosIdX = int(std::floor(pose_current.translation().x() / LASER_CELL_WIDTH + 0.5)) + origin_in_map_x;
   int currentPosIdY = int(std::floor(pose_current.translation().y() / LASER_CELL_HEIGHT + 0.5)) + origin_in_map_y;
@@ -71,7 +71,7 @@ void LaserMapping::updateCurrentPointsToMap(const pcl::PointCloud<pcl::PointXYZI
   }
 }
 
-pcl::PointCloud<pcl::PointXYZI>::Ptr LaserMapping::getMap()
+pcl::PointCloud<pcl::PointXYZI>::Ptr LidarMapping::getMap()
 {
   pcl::PointCloud<pcl::PointXYZI>::Ptr laserCloudMap = pcl::PointCloud<pcl::PointXYZI>::Ptr(new pcl::PointCloud<pcl::PointXYZI>());
   for (int i = 0; i < map_width; i++) {
@@ -86,7 +86,7 @@ pcl::PointCloud<pcl::PointXYZI>::Ptr LaserMapping::getMap()
   return laserCloudMap;
 }
 
-void LaserMapping::addWidthCellNegative()
+void LidarMapping::addWidthCellNegative()
 {
   std::vector<std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr>> map_height_temp;
   for (int j = 0; j < map_height; j++) {
@@ -103,7 +103,7 @@ void LaserMapping::addWidthCellNegative()
   map_width++;
 }
 
-void LaserMapping::addWidthCellPositive()
+void LidarMapping::addWidthCellPositive()
 {
   std::vector<std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr>> map_height_temp;
   for (int j = 0; j < map_height; j++) {
@@ -118,7 +118,7 @@ void LaserMapping::addWidthCellPositive()
   map_width++;
 }
 
-void LaserMapping::addHeightCellNegative()
+void LidarMapping::addHeightCellNegative()
 {
   for (int i = 0; i < map_width; i++) {
     std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> map_depth_temp;
@@ -132,7 +132,7 @@ void LaserMapping::addHeightCellNegative()
   map_height++;
 }
 
-void LaserMapping::addHeightCellPositive()
+void LidarMapping::addHeightCellPositive()
 {
   for (int i = 0; i < map_width; i++) {
     std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> map_depth_temp;
@@ -145,7 +145,7 @@ void LaserMapping::addHeightCellPositive()
   map_height++;
 }
 
-void LaserMapping::addDepthCellNegative()
+void LidarMapping::addDepthCellNegative()
 {
   for (int i = 0; i < map_width; i++) {
     for (int j = 0; j < map_height; j++) {
@@ -157,7 +157,7 @@ void LaserMapping::addDepthCellNegative()
   map_depth++;
 }
 
-void LaserMapping::addDepthCellPositive()
+void LidarMapping::addDepthCellPositive()
 {
   for (int i = 0; i < map_width; i++) {
     for (int j = 0; j < map_height; j++) {
@@ -169,7 +169,7 @@ void LaserMapping::addDepthCellPositive()
 }
 
 // extend map if points exceed size
-void LaserMapping::checkPoints(int& x, int& y, int& z)
+void LidarMapping::checkPoints(int& x, int& y, int& z)
 {
   while (x + LASER_CELL_RANGE_HORIZONTAL > map_width - 1) {
     addWidthCellPositive();

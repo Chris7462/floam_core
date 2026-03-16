@@ -6,7 +6,7 @@
 #include <pcl/filters/filter.h>
 
 // local header
-#include "floam_core/laser_processing.hpp"
+#include "floam_core/lidar_processing.hpp"
 
 
 namespace floam_core
@@ -24,12 +24,12 @@ PointsInfo::PointsInfo(int layer_in, double time_in)
   time = time_in;
 }
 
-void LaserProcessing::init(Lidar lidar_param_in)
+void LidarProcessing::init(Lidar lidar_param_in)
 {
   lidar_param = lidar_param_in;
 }
 
-void LaserProcessing::featureExtraction(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
+void LidarProcessing::featureExtraction(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
   pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_edge,
   pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_surf)
 {
@@ -108,7 +108,7 @@ void LaserProcessing::featureExtraction(const pcl::PointCloud<pcl::PointXYZI>::P
   }
 }
 
-void LaserProcessing::featureExtractionFromSector(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
+void LidarProcessing::featureExtractionFromSector(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
   std::vector<Double2d>& cloudCurvature,
   pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_edge,
   pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_surf)

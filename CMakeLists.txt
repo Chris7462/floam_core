@@ -16,10 +16,10 @@ find_package(g2o REQUIRED)
 # Define the static library target
 add_library(floam_core STATIC
   src/lidar.cpp
-  src/laser_processing.cpp
+  src/lidar_processing.cpp
   src/lidar_optimization.cpp
   src/odom_estimation.cpp
-  src/laser_mapping.cpp
+  src/lidar_mapping.cpp
 )
 
 target_include_directories(floam_core
