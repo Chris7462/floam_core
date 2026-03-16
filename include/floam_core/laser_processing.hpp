@@ -8,6 +8,9 @@
 #include "floam_core/lidar.hpp"
 
 
+namespace floam_core
+{
+
 // points covariance struct
 struct Double2d
 {
@@ -28,7 +31,7 @@ class LaserProcessing
 {
 public:
   LaserProcessing() = default;
-  void init(lidar::Lidar lidar_param_in);
+  void init(Lidar lidar_param_in);
   void featureExtraction(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
     pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_edge,
     pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_surf);
@@ -38,5 +41,7 @@ public:
     pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_surf);
 
 private:
-  lidar::Lidar lidar_param;
+  Lidar lidar_param;
 };
+
+} // namespace floam_core

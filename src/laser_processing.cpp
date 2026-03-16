@@ -9,6 +9,9 @@
 #include "floam_core/laser_processing.hpp"
 
 
+namespace floam_core
+{
+
 Double2d::Double2d(int id_in, double value_in)
 {
   id = id_in;
@@ -21,7 +24,7 @@ PointsInfo::PointsInfo(int layer_in, double time_in)
   time = time_in;
 }
 
-void LaserProcessing::init(lidar::Lidar lidar_param_in)
+void LaserProcessing::init(Lidar lidar_param_in)
 {
   lidar_param = lidar_param_in;
 }
@@ -162,3 +165,5 @@ void LaserProcessing::featureExtractionFromSector(const pcl::PointCloud<pcl::Poi
     }
   }
 }
+
+} // namespace floam_core

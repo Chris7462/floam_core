@@ -1,6 +1,7 @@
 #pragma once
 
-namespace lidar {
+namespace floam_core
+{
 
 class Lidar
 {
@@ -25,4 +26,4 @@ public:
   double vertical_angle;
 };
 
-}
+} // namespace floam_core
