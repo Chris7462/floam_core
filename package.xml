@@ -12,6 +12,8 @@
   <!-- System dependencies -->
   <depend>libpcl-dev</depend>
   <depend>libeigen3-dev</depend>
+  <depend>Sophus</depend>
+  <depend>g2o</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

@@ -10,11 +10,15 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(PCL REQUIRED)
 find_package(Eigen3 REQUIRED)
+find_package(Sophus REQUIRED)
+find_package(g2o REQUIRED)
 
 # Define the static library target
 add_library(floam_core STATIC
   src/lidar.cpp
   src/laser_processing.cpp
+  src/lidar_optimization.cpp
+  src/odom_estimation.cpp
 )
 
 target_include_directories(floam_core
@@ -29,6 +33,9 @@ target_include_directories(floam_core
 target_link_libraries(floam_core
   PRIVATE
     ${PCL_LIBRARIES}
+    Sophus::Sophus
+    g2o::core
+    g2o::solver_dense
 )
 
 target_compile_features(floam_core PUBLIC cxx_std_17)
@@ -59,7 +66,7 @@ install(DIRECTORY include/
 
 # Export targets and dependencies
 ament_export_targets(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
-ament_export_dependencies(PCL Eigen3)
+ament_export_dependencies(PCL Eigen3 Sophus g2o)
 ament_export_include_directories(include)
 
 if(BUILD_TESTING)
