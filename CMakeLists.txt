@@ -19,6 +19,7 @@ add_library(floam_core STATIC
   src/laser_processing.cpp
   src/lidar_optimization.cpp
   src/odom_estimation.cpp
+  src/laser_mapping.cpp
 )
 
 target_include_directories(floam_core
