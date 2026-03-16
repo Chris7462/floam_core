@@ -31,9 +31,10 @@ target_include_directories(floam_core
 )
 
 target_link_libraries(floam_core
+  PUBLIC
+    Sophus::Sophus
   PRIVATE
     ${PCL_LIBRARIES}
-    Sophus::Sophus
     g2o::core
     g2o::solver_dense
 )
