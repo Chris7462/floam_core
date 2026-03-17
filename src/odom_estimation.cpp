@@ -27,16 +27,18 @@ void OdomEstimation::init(double map_resolution)
   optimization_count = 2;
 }
 
-void OdomEstimation::init_map_with_points(const pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_in,
-  const pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_in)
+void OdomEstimation::init_map_with_points(
+  const pcl::PointCloud<pcl::PointXYZI>::Ptr edge_in,
+  const pcl::PointCloud<pcl::PointXYZI>::Ptr surf_in)
 {
   *lidar_cloud_corner_map += *edge_in;
   *lidar_cloud_surf_map += *surf_in;
   optimization_count = 12;
 }
 
-void OdomEstimation::update_points_to_map(const pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_in,
-  const pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_in)
+void OdomEstimation::update_points_to_map(
+  const pcl::PointCloud<pcl::PointXYZI>::Ptr edge_in,
+  const pcl::PointCloud<pcl::PointXYZI>::Ptr surf_in)
 {
   if (optimization_count > 2) {
     optimization_count--;
@@ -89,14 +91,16 @@ void OdomEstimation::update_points_to_map(const pcl::PointCloud<pcl::PointXYZI>:
   add_points_to_map(downsampled_edge_cloud, downsampled_surf_cloud);
 }
 
-void OdomEstimation::get_map(pcl::PointCloud<pcl::PointXYZI>::Ptr& lidar_cloud_map)
+void OdomEstimation::get_map(pcl::PointCloud<pcl::PointXYZI>::Ptr lidar_cloud_map)
 {
   *lidar_cloud_map += *lidar_cloud_surf_map;
   *lidar_cloud_map += *lidar_cloud_corner_map;
 }
 
-void OdomEstimation::add_edge_cost_factor(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
-  const pcl::PointCloud<pcl::PointXYZI>::Ptr& map_in, g2o::SparseOptimizer& opt, FloamVertex* v)
+void OdomEstimation::add_edge_cost_factor(
+  const pcl::PointCloud<pcl::PointXYZI>::Ptr pc_in,
+  const pcl::PointCloud<pcl::PointXYZI>::Ptr map_in,
+  g2o::SparseOptimizer& opt, FloamVertex* v)
 {
   int corner_num = 0;
   for (int i = 0; i < (int)pc_in->points.size(); i++) {
@@ -152,8 +156,10 @@ void OdomEstimation::add_edge_cost_factor(const pcl::PointCloud<pcl::PointXYZI>:
   }
 }
 
-void OdomEstimation::add_surf_cost_factor(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
-  const pcl::PointCloud<pcl::PointXYZI>::Ptr& map_in, g2o::SparseOptimizer& opt, FloamVertex* v)
+void OdomEstimation::add_surf_cost_factor(
+  const pcl::PointCloud<pcl::PointXYZI>::Ptr pc_in,
+  const pcl::PointCloud<pcl::PointXYZI>::Ptr map_in,
+  g2o::SparseOptimizer& opt, FloamVertex* v)
 {
   int surf_num = 0;
   for (int i = 0; i < (int)pc_in->points.size(); i++) {
@@ -208,8 +214,9 @@ void OdomEstimation::add_surf_cost_factor(const pcl::PointCloud<pcl::PointXYZI>:
   }
 }
 
-void OdomEstimation::add_points_to_map(const pcl::PointCloud<pcl::PointXYZI>::Ptr& downsampled_edge_cloud,
-  const pcl::PointCloud<pcl::PointXYZI>::Ptr& downsampled_surf_cloud)
+void OdomEstimation::add_points_to_map(
+  const pcl::PointCloud<pcl::PointXYZI>::Ptr downsampled_edge_cloud,
+  const pcl::PointCloud<pcl::PointXYZI>::Ptr downsampled_surf_cloud)
 {
   for (int i = 0; i < (int)downsampled_edge_cloud->points.size(); i++) {
     pcl::PointXYZI point_temp;
@@ -257,10 +264,11 @@ void OdomEstimation::point_associate_to_map(pcl::PointXYZI const *const pi, pcl:
   po->intensity = pi->intensity;
 }
 
-void OdomEstimation::down_sampling_to_map(const pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_pc_in,
-  pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_pc_out,
-  const pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_pc_in,
-  pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_pc_out)
+void OdomEstimation::down_sampling_to_map(
+  const pcl::PointCloud<pcl::PointXYZI>::Ptr edge_pc_in,
+  pcl::PointCloud<pcl::PointXYZI>::Ptr edge_pc_out,
+  const pcl::PointCloud<pcl::PointXYZI>::Ptr surf_pc_in,
+  pcl::PointCloud<pcl::PointXYZI>::Ptr surf_pc_out)
 {
   down_size_filter_edge.setInputCloud(edge_pc_in);
   down_size_filter_edge.filter(*edge_pc_out);

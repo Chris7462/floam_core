@@ -36,7 +36,9 @@ void LidarMapping::init(double map_resolution)
 }
 
 // update points to map
-void LidarMapping::update_current_points_to_map(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in, const Eigen::Isometry3d& pose_current)
+void LidarMapping::update_current_points_to_map(
+  const pcl::PointCloud<pcl::PointXYZI>::Ptr pc_in,
+  const Eigen::Isometry3d& pose_current)
 {
   int current_pos_id_x = int(std::floor(pose_current.translation().x() / LASER_CELL_WIDTH + 0.5)) + origin_in_map_x;
   int current_pos_id_y = int(std::floor(pose_current.translation().y() / LASER_CELL_HEIGHT + 0.5)) + origin_in_map_y;

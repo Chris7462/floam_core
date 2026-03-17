@@ -26,9 +26,14 @@ class OdomEstimation
 public:
   OdomEstimation() = default;
   void init(double map_resolution);
-  void init_map_with_points(const pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_in, const pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_in);
-  void update_points_to_map(const pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_in, const pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_in);
-  void get_map(pcl::PointCloud<pcl::PointXYZI>::Ptr& lidar_cloud_map);
+
+  void init_map_with_points(const pcl::PointCloud<pcl::PointXYZI>::Ptr edge_in,
+    const pcl::PointCloud<pcl::PointXYZI>::Ptr surf_in);
+
+  void update_points_to_map(const pcl::PointCloud<pcl::PointXYZI>::Ptr edge_in,
+    const pcl::PointCloud<pcl::PointXYZI>::Ptr surf_in);
+
+  void get_map(pcl::PointCloud<pcl::PointXYZI>::Ptr lidar_cloud_map);
 
   Eigen::Isometry3d odom;
   pcl::PointCloud<pcl::PointXYZI>::Ptr lidar_cloud_corner_map;
@@ -59,12 +64,25 @@ private:
   // optimization count
   int optimization_count;
 
-  // function
-  void add_edge_cost_factor(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in, const pcl::PointCloud<pcl::PointXYZI>::Ptr& map_in, g2o::SparseOptimizer& opt, FloamVertex* v);
-  void add_surf_cost_factor(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in, const pcl::PointCloud<pcl::PointXYZI>::Ptr& map_in, g2o::SparseOptimizer& opt, FloamVertex* v);
-  void add_points_to_map(const pcl::PointCloud<pcl::PointXYZI>::Ptr& downsampled_edge_cloud, const pcl::PointCloud<pcl::PointXYZI>::Ptr& downsampled_surf_cloud);
+  // functions
+  void add_edge_cost_factor(const pcl::PointCloud<pcl::PointXYZI>::Ptr pc_in,
+    const pcl::PointCloud<pcl::PointXYZI>::Ptr map_in,
+    g2o::SparseOptimizer& opt, FloamVertex* v);
+
+  void add_surf_cost_factor(const pcl::PointCloud<pcl::PointXYZI>::Ptr pc_in,
+    const pcl::PointCloud<pcl::PointXYZI>::Ptr map_in,
+    g2o::SparseOptimizer& opt, FloamVertex* v);
+
+  void add_points_to_map(
+    const pcl::PointCloud<pcl::PointXYZI>::Ptr downsampled_edge_cloud,
+    const pcl::PointCloud<pcl::PointXYZI>::Ptr downsampled_surf_cloud);
+
   void point_associate_to_map(pcl::PointXYZI const *const pi, pcl::PointXYZI *const po);
-  void down_sampling_to_map(const pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_pc_in, pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_pc_out, const pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_pc_in, pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_pc_out);
+
+  void down_sampling_to_map(const pcl::PointCloud<pcl::PointXYZI>::Ptr edge_pc_in,
+    pcl::PointCloud<pcl::PointXYZI>::Ptr edge_pc_out,
+    const pcl::PointCloud<pcl::PointXYZI>::Ptr surf_pc_in,
+    pcl::PointCloud<pcl::PointXYZI>::Ptr surf_pc_out);
 };
 
 } // namespace floam_core

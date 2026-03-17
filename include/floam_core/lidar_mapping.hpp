@@ -26,8 +26,13 @@ class LidarMapping
 {
   public:
     LidarMapping() = default;
+
     void init(double map_resolution);
-    void update_current_points_to_map(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in, const Eigen::Isometry3d& pose_current);
+
+    void update_current_points_to_map(
+      const pcl::PointCloud<pcl::PointXYZI>::Ptr pc_in,
+      const Eigen::Isometry3d & pose_current);
+
     pcl::PointCloud<pcl::PointXYZI>::Ptr get_map();
 
   private:
