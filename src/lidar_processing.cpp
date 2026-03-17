@@ -29,9 +29,10 @@ void LidarProcessing::init(Lidar lidar_param_in)
   lidar_param = lidar_param_in;
 }
 
-void LidarProcessing::feature_extraction(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
-  pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_edge,
-  pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_surf)
+void LidarProcessing::feature_extraction(
+  const pcl::PointCloud<pcl::PointXYZI>::Ptr pc_in,
+  pcl::PointCloud<pcl::PointXYZI>::Ptr pc_out_edge,
+  pcl::PointCloud<pcl::PointXYZI>::Ptr pc_out_surf)
 {
   std::vector<int> indices;
   pcl::removeNaNFromPointCloud(*pc_in, *pc_in, indices);
@@ -108,10 +109,11 @@ void LidarProcessing::feature_extraction(const pcl::PointCloud<pcl::PointXYZI>::
   }
 }
 
-void LidarProcessing::feature_extraction_from_sector(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
-  std::vector<Double2d>& cloud_curvature,
-  pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_edge,
-  pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_surf)
+void LidarProcessing::feature_extraction_from_sector(
+  const pcl::PointCloud<pcl::PointXYZI>::Ptr pc_in,
+  std::vector<Double2d> & cloud_curvature,
+  pcl::PointCloud<pcl::PointXYZI>::Ptr pc_out_edge,
+  pcl::PointCloud<pcl::PointXYZI>::Ptr pc_out_surf)
 {
   std::sort(cloud_curvature.begin(), cloud_curvature.end(), [](const Double2d & a, const Double2d & b) {
     return a.value < b.value;
