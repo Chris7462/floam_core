@@ -26,13 +26,13 @@ class OdomEstimation
 public:
   OdomEstimation() = default;
   void init(double map_resolution);
-  void initMapWithPoints(const pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_in, const pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_in);
-  void updatePointsToMap(const pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_in, const pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_in);
-  void getMap(pcl::PointCloud<pcl::PointXYZI>::Ptr& laserCloudMap);
+  void init_map_with_points(const pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_in, const pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_in);
+  void update_points_to_map(const pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_in, const pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_in);
+  void get_map(pcl::PointCloud<pcl::PointXYZI>::Ptr& lidar_cloud_map);
 
   Eigen::Isometry3d odom;
-  pcl::PointCloud<pcl::PointXYZI>::Ptr laserCloudCornerMap;
-  pcl::PointCloud<pcl::PointXYZI>::Ptr laserCloudSurfMap;
+  pcl::PointCloud<pcl::PointXYZI>::Ptr lidar_cloud_corner_map;
+  pcl::PointCloud<pcl::PointXYZI>::Ptr lidar_cloud_surf_map;
 
 private:
   using BlockSolverType = g2o::BlockSolver<g2o::BlockSolverTraits<6, 1>>;
@@ -46,25 +46,25 @@ private:
   Eigen::Isometry3d last_odom;
 
   // kd-tree
-  pcl::KdTreeFLANN<pcl::PointXYZI>::Ptr kdtreeEdgeMap;
-  pcl::KdTreeFLANN<pcl::PointXYZI>::Ptr kdtreeSurfMap;
+  pcl::KdTreeFLANN<pcl::PointXYZI>::Ptr kdtree_edge_map;
+  pcl::KdTreeFLANN<pcl::PointXYZI>::Ptr kdtree_surf_map;
 
   // points downsampling before add to map
-  pcl::VoxelGrid<pcl::PointXYZI> downSizeFilterEdge;
-  pcl::VoxelGrid<pcl::PointXYZI> downSizeFilterSurf;
+  pcl::VoxelGrid<pcl::PointXYZI> down_size_filter_edge;
+  pcl::VoxelGrid<pcl::PointXYZI> down_size_filter_surf;
 
   // local map
-  pcl::CropBox<pcl::PointXYZI> cropBoxFilter;
+  pcl::CropBox<pcl::PointXYZI> crop_box_filter;
 
   // optimization count
   int optimization_count;
 
   // function
-  void addEdgeCostFactor(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in, const pcl::PointCloud<pcl::PointXYZI>::Ptr& map_in, g2o::SparseOptimizer& opt, FloamVertex* v);
-  void addSurfCostFactor(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in, const pcl::PointCloud<pcl::PointXYZI>::Ptr& map_in, g2o::SparseOptimizer& opt, FloamVertex* v);
-  void addPointsToMap(const pcl::PointCloud<pcl::PointXYZI>::Ptr& downsampledEdgeCloud, const pcl::PointCloud<pcl::PointXYZI>::Ptr& downsampledSurfCloud);
-  void pointAssociateToMap(pcl::PointXYZI const *const pi, pcl::PointXYZI *const po);
-  void downSamplingToMap(const pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_pc_in, pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_pc_out, const pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_pc_in, pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_pc_out);
+  void add_edge_cost_factor(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in, const pcl::PointCloud<pcl::PointXYZI>::Ptr& map_in, g2o::SparseOptimizer& opt, FloamVertex* v);
+  void add_surf_cost_factor(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in, const pcl::PointCloud<pcl::PointXYZI>::Ptr& map_in, g2o::SparseOptimizer& opt, FloamVertex* v);
+  void add_points_to_map(const pcl::PointCloud<pcl::PointXYZI>::Ptr& downsampled_edge_cloud, const pcl::PointCloud<pcl::PointXYZI>::Ptr& downsampled_surf_cloud);
+  void point_associate_to_map(pcl::PointXYZI const *const pi, pcl::PointXYZI *const po);
+  void down_sampling_to_map(const pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_pc_in, pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_pc_out, const pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_pc_in, pcl::PointCloud<pcl::PointXYZI>::Ptr& surf_pc_out);
 };
 
 } // namespace floam_core

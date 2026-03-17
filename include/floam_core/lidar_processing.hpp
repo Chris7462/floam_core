@@ -32,11 +32,11 @@ class LidarProcessing
 public:
   LidarProcessing() = default;
   void init(Lidar lidar_param_in);
-  void featureExtraction(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
+  void feature_extraction(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
     pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_edge,
     pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_surf);
-  void featureExtractionFromSector(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
-    std::vector<Double2d>& cloudCurvature,
+  void feature_extraction_from_sector(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
+    std::vector<Double2d>& cloud_curvature,
     pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_edge,
     pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_surf);
 

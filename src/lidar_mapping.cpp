@@ -32,18 +32,18 @@ void LidarMapping::init(double map_resolution)
   map_depth = LASER_CELL_RANGE_HORIZONTAL*2+1;
 
   // downsampling size
-  downSizeFilter.setLeafSize(map_resolution, map_resolution, map_resolution);
+  down_size_filter.setLeafSize(map_resolution, map_resolution, map_resolution);
 }
 
 // update points to map
-void LidarMapping::updateCurrentPointsToMap(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in, const Eigen::Isometry3d& pose_current)
+void LidarMapping::update_current_points_to_map(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in, const Eigen::Isometry3d& pose_current)
 {
-  int currentPosIdX = int(std::floor(pose_current.translation().x() / LASER_CELL_WIDTH + 0.5)) + origin_in_map_x;
-  int currentPosIdY = int(std::floor(pose_current.translation().y() / LASER_CELL_HEIGHT + 0.5)) + origin_in_map_y;
-  int currentPosIdZ = int(std::floor(pose_current.translation().z() / LASER_CELL_DEPTH + 0.5)) + origin_in_map_z;
+  int current_pos_id_x = int(std::floor(pose_current.translation().x() / LASER_CELL_WIDTH + 0.5)) + origin_in_map_x;
+  int current_pos_id_y = int(std::floor(pose_current.translation().y() / LASER_CELL_HEIGHT + 0.5)) + origin_in_map_y;
+  int current_pos_id_z = int(std::floor(pose_current.translation().z() / LASER_CELL_DEPTH + 0.5)) + origin_in_map_z;
 
   // check is submap is null
-  checkPoints(currentPosIdX, currentPosIdY, currentPosIdZ);
+  check_points(current_pos_id_x, current_pos_id_y, current_pos_id_z);
 
   pcl::PointCloud<pcl::PointXYZI>::Ptr transformed_pc(new pcl::PointCloud<pcl::PointXYZI>());
   pcl::transformPointCloud(*pc_in, *transformed_pc, pose_current.cast<float>());
@@ -53,40 +53,40 @@ void LidarMapping::updateCurrentPointsToMap(const pcl::PointCloud<pcl::PointXYZI
     pcl::PointXYZI point_temp = transformed_pc->points[i];
     // for visualization only
     point_temp.intensity = std::min(1.0 , std::max(pc_in->points[i].z+2.0, 0.0) / 5);
-    int currentPointIdX = int(std::floor(point_temp.x / LASER_CELL_WIDTH + 0.5)) + origin_in_map_x;
-    int currentPointIdY = int(std::floor(point_temp.y / LASER_CELL_HEIGHT + 0.5)) + origin_in_map_y;
-    int currentPointIdZ = int(std::floor(point_temp.z / LASER_CELL_DEPTH + 0.5)) + origin_in_map_z;
+    int current_point_id_x = int(std::floor(point_temp.x / LASER_CELL_WIDTH + 0.5)) + origin_in_map_x;
+    int current_point_id_y = int(std::floor(point_temp.y / LASER_CELL_HEIGHT + 0.5)) + origin_in_map_y;
+    int current_point_id_z = int(std::floor(point_temp.z / LASER_CELL_DEPTH + 0.5)) + origin_in_map_z;
 
-    map[currentPointIdX][currentPointIdY][currentPointIdZ]->push_back(point_temp);
+    map[current_point_id_x][current_point_id_y][current_point_id_z]->push_back(point_temp);
   }
 
   // filtering points
-  for (int i = currentPosIdX - LASER_CELL_RANGE_HORIZONTAL; i < currentPosIdX + LASER_CELL_RANGE_HORIZONTAL + 1; i++) {
-    for (int j = currentPosIdY - LASER_CELL_RANGE_HORIZONTAL; j < currentPosIdY + LASER_CELL_RANGE_HORIZONTAL + 1; j++) {
-      for (int k = currentPosIdZ - LASER_CELL_RANGE_VERTICAL; k < currentPosIdZ + LASER_CELL_RANGE_VERTICAL + 1; k++) {
-        downSizeFilter.setInputCloud(map[i][j][k]);
-        downSizeFilter.filter(*(map[i][j][k]));
+  for (int i = current_pos_id_x - LASER_CELL_RANGE_HORIZONTAL; i < current_pos_id_x + LASER_CELL_RANGE_HORIZONTAL + 1; i++) {
+    for (int j = current_pos_id_y - LASER_CELL_RANGE_HORIZONTAL; j < current_pos_id_y + LASER_CELL_RANGE_HORIZONTAL + 1; j++) {
+      for (int k = current_pos_id_z - LASER_CELL_RANGE_VERTICAL; k < current_pos_id_z + LASER_CELL_RANGE_VERTICAL + 1; k++) {
+        down_size_filter.setInputCloud(map[i][j][k]);
+        down_size_filter.filter(*(map[i][j][k]));
       }
     }
   }
 }
 
-pcl::PointCloud<pcl::PointXYZI>::Ptr LidarMapping::getMap()
+pcl::PointCloud<pcl::PointXYZI>::Ptr LidarMapping::get_map()
 {
-  pcl::PointCloud<pcl::PointXYZI>::Ptr laserCloudMap = pcl::PointCloud<pcl::PointXYZI>::Ptr(new pcl::PointCloud<pcl::PointXYZI>());
+  pcl::PointCloud<pcl::PointXYZI>::Ptr lidar_cloud_map = pcl::PointCloud<pcl::PointXYZI>::Ptr(new pcl::PointCloud<pcl::PointXYZI>());
   for (int i = 0; i < map_width; i++) {
     for (int j = 0; j < map_height; j++) {
       for (int k = 0; k < map_depth; k++) {
         if (map[i][j][k] != nullptr) {
-          *laserCloudMap += *(map[i][j][k]);
+          *lidar_cloud_map += *(map[i][j][k]);
         }
       }
     }
   }
-  return laserCloudMap;
+  return lidar_cloud_map;
 }
 
-void LidarMapping::addWidthCellNegative()
+void LidarMapping::add_width_cell_negative()
 {
   std::vector<std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr>> map_height_temp;
   for (int j = 0; j < map_height; j++) {
@@ -103,7 +103,7 @@ void LidarMapping::addWidthCellNegative()
   map_width++;
 }
 
-void LidarMapping::addWidthCellPositive()
+void LidarMapping::add_width_cell_positive()
 {
   std::vector<std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr>> map_height_temp;
   for (int j = 0; j < map_height; j++) {
@@ -118,7 +118,7 @@ void LidarMapping::addWidthCellPositive()
   map_width++;
 }
 
-void LidarMapping::addHeightCellNegative()
+void LidarMapping::add_height_cell_negative()
 {
   for (int i = 0; i < map_width; i++) {
     std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> map_depth_temp;
@@ -132,7 +132,7 @@ void LidarMapping::addHeightCellNegative()
   map_height++;
 }
 
-void LidarMapping::addHeightCellPositive()
+void LidarMapping::add_height_cell_positive()
 {
   for (int i = 0; i < map_width; i++) {
     std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> map_depth_temp;
@@ -145,7 +145,7 @@ void LidarMapping::addHeightCellPositive()
   map_height++;
 }
 
-void LidarMapping::addDepthCellNegative()
+void LidarMapping::add_depth_cell_negative()
 {
   for (int i = 0; i < map_width; i++) {
     for (int j = 0; j < map_height; j++) {
@@ -157,7 +157,7 @@ void LidarMapping::addDepthCellNegative()
   map_depth++;
 }
 
-void LidarMapping::addDepthCellPositive()
+void LidarMapping::add_depth_cell_positive()
 {
   for (int i = 0; i < map_width; i++) {
     for (int j = 0; j < map_height; j++) {
@@ -169,27 +169,27 @@ void LidarMapping::addDepthCellPositive()
 }
 
 // extend map if points exceed size
-void LidarMapping::checkPoints(int& x, int& y, int& z)
+void LidarMapping::check_points(int& x, int& y, int& z)
 {
   while (x + LASER_CELL_RANGE_HORIZONTAL > map_width - 1) {
-    addWidthCellPositive();
+    add_width_cell_positive();
   }
   while (x - LASER_CELL_RANGE_HORIZONTAL < 0) {
-    addWidthCellNegative();
+    add_width_cell_negative();
     x++;
   }
   while (y + LASER_CELL_RANGE_HORIZONTAL > map_height - 1) {
-    addHeightCellPositive();
+    add_height_cell_positive();
   }
   while (y - LASER_CELL_RANGE_HORIZONTAL < 0) {
-    addHeightCellNegative();
+    add_height_cell_negative();
     y++;
   }
   while (z + LASER_CELL_RANGE_VERTICAL > map_depth - 1) {
-    addDepthCellPositive();
+    add_depth_cell_positive();
   }
   while (z - LASER_CELL_RANGE_VERTICAL < 0) {
-    addDepthCellNegative();
+    add_depth_cell_negative();
     z++;
   }
 

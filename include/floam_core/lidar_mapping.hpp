@@ -27,8 +27,8 @@ class LidarMapping
   public:
     LidarMapping() = default;
     void init(double map_resolution);
-    void updateCurrentPointsToMap(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in, const Eigen::Isometry3d& pose_current);
-    pcl::PointCloud<pcl::PointXYZI>::Ptr getMap();
+    void update_current_points_to_map(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in, const Eigen::Isometry3d& pose_current);
+    pcl::PointCloud<pcl::PointXYZI>::Ptr get_map();
 
   private:
     int origin_in_map_x;
@@ -38,15 +38,15 @@ class LidarMapping
     int map_height;
     int map_depth;
     std::vector<std::vector<std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr>>> map;
-    pcl::VoxelGrid<pcl::PointXYZI> downSizeFilter;
+    pcl::VoxelGrid<pcl::PointXYZI> down_size_filter;
 
-    void addWidthCellNegative();
-    void addWidthCellPositive();
-    void addHeightCellNegative();
-    void addHeightCellPositive();
-    void addDepthCellNegative();
-    void addDepthCellPositive();
-    void checkPoints(int& x, int& y, int& z);
+    void add_width_cell_negative();
+    void add_width_cell_positive();
+    void add_height_cell_negative();
+    void add_height_cell_positive();
+    void add_depth_cell_negative();
+    void add_depth_cell_positive();
+    void check_points(int& x, int& y, int& z);
 };
 
 } // namespace floam_core

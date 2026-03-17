@@ -29,7 +29,7 @@ void LidarProcessing::init(Lidar lidar_param_in)
   lidar_param = lidar_param_in;
 }
 
-void LidarProcessing::featureExtraction(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
+void LidarProcessing::feature_extraction(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
   pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_edge,
   pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_surf)
 {
@@ -37,10 +37,10 @@ void LidarProcessing::featureExtraction(const pcl::PointCloud<pcl::PointXYZI>::P
   pcl::removeNaNFromPointCloud(*pc_in, *pc_in, indices);
 
   int N_SCANS = lidar_param.num_lines;
-  std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> laserCloudScans;
+  std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> lidar_cloud_scans;
 
   for (int i = 0; i < N_SCANS; ++i) {
-    laserCloudScans.push_back(pcl::PointCloud<pcl::PointXYZI>::Ptr(new pcl::PointCloud<pcl::PointXYZI>()));
+    lidar_cloud_scans.push_back(pcl::PointCloud<pcl::PointXYZI>::Ptr(new pcl::PointCloud<pcl::PointXYZI>()));
   }
 
   for (int i = 0; i < (int)pc_in->points.size(); i++) {
@@ -76,22 +76,22 @@ void LidarProcessing::featureExtraction(const pcl::PointCloud<pcl::PointXYZI>::P
       printf("wrong scan number\n");
     }
 
-    laserCloudScans[scanID]->push_back(pc_in->points[i]);
+    lidar_cloud_scans[scanID]->push_back(pc_in->points[i]);
   }
 
   for (int i = 0; i < N_SCANS; i++) {
-    if (laserCloudScans[i]->points.size() < 131) {
+    if (lidar_cloud_scans[i]->points.size() < 131) {
       continue;
     }
 
-    std::vector<Double2d> cloudCurvature;
-    int total_points = laserCloudScans[i]->points.size() - 10;
-    for (int j = 5; j < (int)laserCloudScans[i]->points.size() - 5; ++j) {
-      double diffX = laserCloudScans[i]->points[j - 5].x + laserCloudScans[i]->points[j - 4].x + laserCloudScans[i]->points[j - 3].x + laserCloudScans[i]->points[j - 2].x + laserCloudScans[i]->points[j - 1].x - 10 * laserCloudScans[i]->points[j].x + laserCloudScans[i]->points[j + 1].x + laserCloudScans[i]->points[j + 2].x + laserCloudScans[i]->points[j + 3].x + laserCloudScans[i]->points[j + 4].x + laserCloudScans[i]->points[j + 5].x;
-      double diffY = laserCloudScans[i]->points[j - 5].y + laserCloudScans[i]->points[j - 4].y + laserCloudScans[i]->points[j - 3].y + laserCloudScans[i]->points[j - 2].y + laserCloudScans[i]->points[j - 1].y - 10 * laserCloudScans[i]->points[j].y + laserCloudScans[i]->points[j + 1].y + laserCloudScans[i]->points[j + 2].y + laserCloudScans[i]->points[j + 3].y + laserCloudScans[i]->points[j + 4].y + laserCloudScans[i]->points[j + 5].y;
-      double diffZ = laserCloudScans[i]->points[j - 5].z + laserCloudScans[i]->points[j - 4].z + laserCloudScans[i]->points[j - 3].z + laserCloudScans[i]->points[j - 2].z + laserCloudScans[i]->points[j - 1].z - 10 * laserCloudScans[i]->points[j].z + laserCloudScans[i]->points[j + 1].z + laserCloudScans[i]->points[j + 2].z + laserCloudScans[i]->points[j + 3].z + laserCloudScans[i]->points[j + 4].z + laserCloudScans[i]->points[j + 5].z;
+    std::vector<Double2d> cloud_curvature;
+    int total_points = lidar_cloud_scans[i]->points.size() - 10;
+    for (int j = 5; j < (int)lidar_cloud_scans[i]->points.size() - 5; ++j) {
+      double diffX = lidar_cloud_scans[i]->points[j - 5].x + lidar_cloud_scans[i]->points[j - 4].x + lidar_cloud_scans[i]->points[j - 3].x + lidar_cloud_scans[i]->points[j - 2].x + lidar_cloud_scans[i]->points[j - 1].x - 10 * lidar_cloud_scans[i]->points[j].x + lidar_cloud_scans[i]->points[j + 1].x + lidar_cloud_scans[i]->points[j + 2].x + lidar_cloud_scans[i]->points[j + 3].x + lidar_cloud_scans[i]->points[j + 4].x + lidar_cloud_scans[i]->points[j + 5].x;
+      double diffY = lidar_cloud_scans[i]->points[j - 5].y + lidar_cloud_scans[i]->points[j - 4].y + lidar_cloud_scans[i]->points[j - 3].y + lidar_cloud_scans[i]->points[j - 2].y + lidar_cloud_scans[i]->points[j - 1].y - 10 * lidar_cloud_scans[i]->points[j].y + lidar_cloud_scans[i]->points[j + 1].y + lidar_cloud_scans[i]->points[j + 2].y + lidar_cloud_scans[i]->points[j + 3].y + lidar_cloud_scans[i]->points[j + 4].y + lidar_cloud_scans[i]->points[j + 5].y;
+      double diffZ = lidar_cloud_scans[i]->points[j - 5].z + lidar_cloud_scans[i]->points[j - 4].z + lidar_cloud_scans[i]->points[j - 3].z + lidar_cloud_scans[i]->points[j - 2].z + lidar_cloud_scans[i]->points[j - 1].z - 10 * lidar_cloud_scans[i]->points[j].z + lidar_cloud_scans[i]->points[j + 1].z + lidar_cloud_scans[i]->points[j + 2].z + lidar_cloud_scans[i]->points[j + 3].z + lidar_cloud_scans[i]->points[j + 4].z + lidar_cloud_scans[i]->points[j + 5].z;
       Double2d distance(j, diffX * diffX + diffY * diffY + diffZ * diffZ);
-      cloudCurvature.push_back(distance);
+      cloud_curvature.push_back(distance);
     }
 
     for (int j = 0; j < 6; ++j) {
@@ -101,36 +101,36 @@ void LidarProcessing::featureExtraction(const pcl::PointCloud<pcl::PointXYZI>::P
       if (j==5) {
           sector_end = total_points - 1;
       }
-      std::vector<Double2d> subCloudCurvature(cloudCurvature.begin()+sector_start,cloudCurvature.begin()+sector_end);
+      std::vector<Double2d> sub_cloud_curvature(cloud_curvature.begin()+sector_start,cloud_curvature.begin()+sector_end);
 
-      featureExtractionFromSector(laserCloudScans[i], subCloudCurvature, pc_out_edge, pc_out_surf);
+      feature_extraction_from_sector(lidar_cloud_scans[i], sub_cloud_curvature, pc_out_edge, pc_out_surf);
     }
   }
 }
 
-void LidarProcessing::featureExtractionFromSector(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
-  std::vector<Double2d>& cloudCurvature,
+void LidarProcessing::feature_extraction_from_sector(const pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
+  std::vector<Double2d>& cloud_curvature,
   pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_edge,
   pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_surf)
 {
-  std::sort(cloudCurvature.begin(), cloudCurvature.end(), [](const Double2d & a, const Double2d & b) {
+  std::sort(cloud_curvature.begin(), cloud_curvature.end(), [](const Double2d & a, const Double2d & b) {
     return a.value < b.value;
   });
 
-  int largestPickedNum = 0;
+  int largest_picked_num = 0;
   std::vector<int> picked_points;
   int point_info_count = 0;
-  for (int i = cloudCurvature.size()-1; i >= 0; i--) {
-    int ind = cloudCurvature[i].id;
+  for (int i = cloud_curvature.size()-1; i >= 0; i--) {
+    int ind = cloud_curvature[i].id;
     if (std::find(picked_points.begin(), picked_points.end(), ind)==picked_points.end()) {
-      if (cloudCurvature[i].value <= 0.1) {
+      if (cloud_curvature[i].value <= 0.1) {
         break;
       }
 
-      largestPickedNum++;
+      largest_picked_num++;
       picked_points.push_back(ind);
 
-      if (largestPickedNum <= 20) {
+      if (largest_picked_num <= 20) {
         pc_out_edge->push_back(pc_in->points[ind]);
         point_info_count++;
       } else {
@@ -158,8 +158,8 @@ void LidarProcessing::featureExtractionFromSector(const pcl::PointCloud<pcl::Poi
     }
   }
 
-  for (int i = 0; i < (int)cloudCurvature.size(); i++) {
-    int ind = cloudCurvature[i].id;
+  for (int i = 0; i < (int)cloud_curvature.size(); i++) {
+    int ind = cloud_curvature[i].id;
     if (std::find(picked_points.begin(), picked_points.end(), ind) == picked_points.end()) {
       pc_out_surf->push_back(pc_in->points[ind]);
     }
