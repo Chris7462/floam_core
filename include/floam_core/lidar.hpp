@@ -7,7 +7,7 @@ struct Lidar
 {
   double max_distance;
   double min_distance;
-  int num_lines;
+  int num_scan_lines;
   double scan_period;
   int points_per_line;
   double horizontal_angle_resolution;

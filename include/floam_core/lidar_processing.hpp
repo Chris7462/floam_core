@@ -46,7 +46,7 @@ public:
     pcl::PointCloud<pcl::PointXYZI>::Ptr pc_out_surf);
 
 private:
-  Lidar lidar_param;
+  Lidar lidar_param_;
 };
 
 } // namespace floam_core

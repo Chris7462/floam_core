@@ -26,7 +26,7 @@ PointsInfo::PointsInfo(int layer_in, double time_in)
 
 void LidarProcessing::init(Lidar lidar_param_in)
 {
-  lidar_param = lidar_param_in;
+  lidar_param_ = lidar_param_in;
 }
 
 void LidarProcessing::feature_extraction(
@@ -37,7 +37,7 @@ void LidarProcessing::feature_extraction(
   std::vector<int> indices;
   pcl::removeNaNFromPointCloud(*pc_in, *pc_in, indices);
 
-  int N_SCANS = lidar_param.num_lines;
+  int N_SCANS = lidar_param_.num_scan_lines;
   std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> lidar_cloud_scans;
 
   for (int i = 0; i < N_SCANS; ++i) {
@@ -47,7 +47,7 @@ void LidarProcessing::feature_extraction(
   for (int i = 0; i < (int)pc_in->points.size(); i++) {
     int scanID = 0;
     double distance = sqrt(pc_in->points[i].x * pc_in->points[i].x + pc_in->points[i].y * pc_in->points[i].y);
-    if (distance < lidar_param.min_distance || distance > lidar_param.max_distance) {
+    if (distance < lidar_param_.min_distance || distance > lidar_param_.max_distance) {
       continue;
     }
 
