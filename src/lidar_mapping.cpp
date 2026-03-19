@@ -29,7 +29,7 @@ void LidarMapping::init(double map_resolution)
   origin_in_map_z = LASER_CELL_RANGE_VERTICAL;
   map_width = LASER_CELL_RANGE_HORIZONTAL*2+1;
   map_height = LASER_CELL_RANGE_HORIZONTAL*2+1;
-  map_depth = LASER_CELL_RANGE_HORIZONTAL*2+1;
+  map_depth = LASER_CELL_RANGE_VERTICAL*2+1;
 
   // downsampling size
   down_size_filter.setLeafSize(map_resolution, map_resolution, map_resolution);
