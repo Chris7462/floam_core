@@ -28,7 +28,7 @@ public:
 
   virtual ~EdgeAnalyticCostFunction() {}
 
-  virtual bool Evaluate(
+  bool Evaluate(
     double const * const * parameters,
     double * residuals,
     double ** jacobians) const override;
@@ -50,7 +50,7 @@ public:
 
   virtual ~SurfNormAnalyticCostFunction() {}
 
-  virtual bool Evaluate(
+  bool Evaluate(
     double const * const * parameters,
     double * residuals,
     double ** jacobians) const override;
@@ -68,26 +68,26 @@ public:
   PoseSE3Manifold() {}
   virtual ~PoseSE3Manifold() {}
 
-  virtual bool Plus(
+  bool Plus(
     const double * x,
     const double * delta,
     double * x_plus_delta) const override;
 
-  virtual bool PlusJacobian(
+  bool PlusJacobian(
     const double * x,
     double * jacobian) const override;
 
-  virtual bool Minus(
+  bool Minus(
     const double * y,
     const double * x,
     double * y_minus_x) const override;
 
-  virtual bool MinusJacobian(
+  bool MinusJacobian(
     const double * x,
     double * jacobian) const override;
 
-  virtual int AmbientSize() const override { return 7; }
-  virtual int TangentSize() const override { return 6; }
+  int AmbientSize() const override {return 7;}
+  int TangentSize() const override {return 6;}
 };
 
-} // namespace floam_core
+}  // namespace floam_core

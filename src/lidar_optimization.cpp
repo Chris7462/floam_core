@@ -1,6 +1,3 @@
-// ceres header
-#include <ceres/ceres.h>
-
 // local header
 #include "floam_core/lidar_optimization.hpp"
 
@@ -27,12 +24,12 @@ void getTransformFromSe3(
     V = R;
   } else {
     Eigen::Matrix3d Omega2 = Omega * Omega;
-    R = Eigen::Matrix3d::Identity()
-      + std::sin(theta) / theta * Omega
-      + (1.0 - std::cos(theta)) / (theta * theta) * Omega2;
-    V = Eigen::Matrix3d::Identity()
-      + (1.0 - std::cos(theta)) / (theta * theta) * Omega
-      + (theta - std::sin(theta)) / (theta * theta * theta) * Omega2;
+    R = Eigen::Matrix3d::Identity() +
+      std::sin(theta) / theta * Omega +
+      (1.0 - std::cos(theta)) / (theta * theta) * Omega2;
+    V = Eigen::Matrix3d::Identity() +
+      (1.0 - std::cos(theta)) / (theta * theta) * Omega +
+      (theta - std::sin(theta)) / (theta * theta * theta) * Omega2;
   }
 
   q = Eigen::Quaterniond(R);
@@ -44,11 +41,11 @@ Eigen::Matrix3d skew(const Eigen::Vector3d & mat_in)
   Eigen::Matrix3d skew_mat;
   skew_mat.setZero();
   skew_mat(0, 1) = -mat_in(2);
-  skew_mat(0, 2) =  mat_in(1);
-  skew_mat(1, 0) =  mat_in(2);
+  skew_mat(0, 2) = mat_in(1);
+  skew_mat(1, 0) = mat_in(2);
   skew_mat(1, 2) = -mat_in(0);
   skew_mat(2, 0) = -mat_in(1);
-  skew_mat(2, 1) =  mat_in(0);
+  skew_mat(2, 1) = mat_in(0);
   return skew_mat;
 }
 
@@ -203,4 +200,4 @@ bool PoseSE3Manifold::MinusJacobian(
   return true;
 }
 
-} // namespace floam_core
+}  // namespace floam_core

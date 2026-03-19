@@ -16,4 +16,4 @@ struct Lidar
   double vertical_angle;
 };
 
-} // namespace floam_core
+}  // namespace floam_core

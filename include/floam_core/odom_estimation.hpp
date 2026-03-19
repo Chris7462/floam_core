@@ -36,9 +36,10 @@ public:
 
   void get_map(pcl::PointCloud<pcl::PointXYZI>::Ptr lidar_cloud_map);
 
-  Eigen::Isometry3d odom;
-  pcl::PointCloud<pcl::PointXYZI>::Ptr lidar_cloud_corner_map;
-  pcl::PointCloud<pcl::PointXYZI>::Ptr lidar_cloud_surf_map;
+  Eigen::Isometry3d odom_;
+
+  pcl::PointCloud<pcl::PointXYZI>::Ptr lidar_cloud_corner_map_;
+  pcl::PointCloud<pcl::PointXYZI>::Ptr lidar_cloud_surf_map_;
 
 private:
   // optimization parameter block: [qx, qy, qz, qw, tx, ty, tz]
@@ -90,4 +91,4 @@ private:
     pcl::PointCloud<pcl::PointXYZI>::Ptr surf_pc_out);
 };
 
-} // namespace floam_core
+}  // namespace floam_core

@@ -4,6 +4,9 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 
+// c++ header
+#include <vector>
+
 // local header
 #include "floam_core/lidar.hpp"
 
@@ -17,14 +20,6 @@ struct Double2d
   int id;
   double value;
   Double2d(int id_in, double value_in);
-};
-
-// points info struct
-struct PointsInfo
-{
-  int layer;
-  double time;
-  PointsInfo(int layer_in, double time_in);
 };
 
 class LidarProcessing
@@ -49,4 +44,4 @@ private:
   Lidar lidar_param_;
 };
 
-} // namespace floam_core
+}  // namespace floam_core
