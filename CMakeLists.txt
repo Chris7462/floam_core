@@ -10,8 +10,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(PCL REQUIRED)
 find_package(Eigen3 REQUIRED)
-find_package(Sophus REQUIRED)
-find_package(g2o REQUIRED)
+find_package(Ceres REQUIRED)
 
 # Define the static library target
 add_library(floam_core STATIC
@@ -32,11 +31,9 @@ target_include_directories(floam_core
 
 target_link_libraries(floam_core
   PUBLIC
-    Sophus::Sophus
+    Ceres::ceres
   PRIVATE
     ${PCL_LIBRARIES}
-    g2o::core
-    g2o::solver_dense
 )
 
 target_compile_features(floam_core PUBLIC cxx_std_17)
@@ -67,7 +64,7 @@ install(DIRECTORY include/
 
 # Export targets and dependencies
 ament_export_targets(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
-ament_export_dependencies(PCL Eigen3 Sophus g2o)
+ament_export_dependencies(PCL Eigen3 Ceres)
 ament_export_include_directories(include)
 
 if(BUILD_TESTING)
