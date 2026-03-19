@@ -10,10 +10,10 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <!-- System dependencies -->
-  <depend>libpcl-dev</depend>
-  <depend>libeigen3-dev</depend>
-  <depend>Sophus</depend>
-  <depend>g2o</depend>
+  <depend>libpcl-all-dev</depend>
+  <depend>eigen</depend>
+  <depend>sophus</depend>
+  <depend>libg2o</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
